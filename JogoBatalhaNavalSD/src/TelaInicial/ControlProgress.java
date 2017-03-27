@@ -44,7 +44,7 @@ public class ControlProgress implements Runnable{
                     painelInicial.setEstadoServidor(msgServidor);
                     painelInicial.repaint();
                     try {
-                    Thread.sleep(100);
+                    Thread.sleep(80);
                     } catch (InterruptedException ex) {
                         JOptionPane.showMessageDialog(null, "Falha na Thread Sleep");
                     }

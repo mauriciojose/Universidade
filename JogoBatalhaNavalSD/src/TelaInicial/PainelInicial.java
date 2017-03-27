@@ -86,7 +86,7 @@ public class PainelInicial extends javax.swing.JPanel{
     {
         
         super.paintComponent(g);
-        //Graphics2D g2 = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
         if (estadoServidor.equals("desconectado")) {
             g.drawImage(imagemFundo, 0, 0, this.getWidth(), this.getHeight(), this);
             desenhaQuadrado(g);
@@ -139,7 +139,7 @@ public class PainelInicial extends javax.swing.JPanel{
      public void desenhaIniciando(Graphics g)
     {
         Graphics2D desenhaString = (Graphics2D) g;
-        if (efeitoDesaparecer < 9) {
+        if (efeitoDesaparecer < 90) {
             desenhaStringIniciar(desenhaString, true);
             efeitoDesaparecer++;
         } else {
@@ -166,8 +166,8 @@ public class PainelInicial extends javax.swing.JPanel{
         desenhaString.setColor(Color.BLACK);
         desenhaString.setFont(fonte);
         desenhaString.drawString("INICIANDO...", 50, 47);
-        desenhaString.setColor(Color.RED);
-        desenhaString.drawString("PLAYER 2 CONECTADO", -20+48, 7+70);
+//        desenhaString.setColor(Color.RED);
+//        desenhaString.drawString("PLAYER 2 CONECTADO", -20+48, 7+70);
     }
     
     //MÉTODOS GETTERS E SETTERS
@@ -177,6 +177,8 @@ public class PainelInicial extends javax.swing.JPanel{
 
     public void setDesconectado(String desconectado) {
         this.desconectado = desconectado;
+        
+        
     }
     
 }

@@ -220,6 +220,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
                         msgServidor = "start";
                         cp.setMsgServidor(msgServidor);
                         
+                        
                         Thread.sleep(7000);
                         //JOptionPane.showMessageDialog(null, "JOGO INICIADO...");
                         if(separaTexto[1].equals("VezTrue"))
