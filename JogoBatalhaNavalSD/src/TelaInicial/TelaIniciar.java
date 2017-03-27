@@ -33,6 +33,9 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
     private ControlProgress cp;
     private PainelInicial painelInicial;
     
+    private JScrollPane listScroller;
+    private JButton jb;
+    
     private Socket cliente;
     private Scanner input;
     private Formatter output;
@@ -63,7 +66,6 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
 
         painelInicial = new PainelInicial();
         painelInicial.setBounds(0, 0, this.getWidth(), this.getHeight());
-        addList();
         this.getContentPane().add(painelInicial);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -81,7 +83,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
         lista.setFont(fonte);
         lista.setBackground(new Color(1.0f, 1.0f, 1.0f,0.8f));
         
-        JScrollPane listScroller = new JScrollPane(lista);
+        listScroller = new JScrollPane(lista);
         listScroller.setBounds(135, 150, 140, 90);
         
         painelInicial.add(listScroller);
@@ -105,7 +107,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
     
     public void addJButon()
     {
-        JButton jb = new JButton("INICIAR");
+        jb = new JButton("INICIAR");
         jb.setFont(fonte);
         jb.setBounds(150, 240, 100, 40);
         jb.addActionListener( new ActionListener() {
@@ -128,14 +130,17 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
         while (conectou) {
 
             try {
-                cliente = new Socket("10.11.150.222", 12345);
+                cliente = new Socket("localhost", 12345);
                 input = new Scanner(cliente.getInputStream());
                 output = new Formatter(cliente.getOutputStream());
 
                 conectou = false;
+                msgServidor = "wait";
+                cp.setMsgServidor(msgServidor);
+                addList();
             } catch (IOException ex) {
-                //JOptionPane.showMessageDialog(null,"SERVIDOR DESCONECTADO");
-                cp.setMsgServidor("waitServer");
+                msgServidor = "desconectado";
+                cp.setMsgServidor(msgServidor);
             }
         }
     }
@@ -208,6 +213,13 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
                     output.format("iniciou,"+separaTexto[2]+"\n");
                     output.flush();
                     try {
+                        painelInicial.remove(listScroller);
+                        painelInicial.remove(jb);
+                        painelInicial.updateUI();
+                        
+                        msgServidor = "start";
+                        cp.setMsgServidor(msgServidor);
+                        
                         Thread.sleep(7000);
                         //JOptionPane.showMessageDialog(null, "JOGO INICIADO...");
                         if(separaTexto[1].equals("VezTrue"))

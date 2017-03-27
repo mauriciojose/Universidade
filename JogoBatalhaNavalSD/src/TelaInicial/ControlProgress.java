@@ -31,7 +31,7 @@ public class ControlProgress implements Runnable{
         {
             //System.out.println("Mensagem: "+msgServidor);
             if (msgServidor.equals("wait")) {
-                painelInicial.setDesconectado("JOGADOR 2 DESCONECTADO");
+                painelInicial.setEstadoServidor("wait");
                 painelInicial.repaint();
                 
                 try {
@@ -50,7 +50,8 @@ public class ControlProgress implements Runnable{
                     }
                 }
                 else{
-                    if (msgServidor.equals("waitServer")||msgServidor.equals("")) {
+                    if (msgServidor.equals("desconectado")||msgServidor.equals("")) {
+                        painelInicial.setEstadoServidor(msgServidor);
                         painelInicial.setDesconectado("SERVIDOR DESCONECTADO");
                         painelInicial.repaint();
                     try {

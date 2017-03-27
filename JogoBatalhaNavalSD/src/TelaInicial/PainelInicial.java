@@ -86,14 +86,25 @@ public class PainelInicial extends javax.swing.JPanel{
     {
         
         super.paintComponent(g);
-        g.drawImage(imagemFundo, 0, 0, this.getWidth(), this.getHeight(), this);
         //Graphics2D g2 = (Graphics2D) g;
-        if (estadoServidor.equals("wait")) {
-            //desenhaQuadrado(g);
-            //desenhaAguardando(g);
+        if (estadoServidor.equals("desconectado")) {
+            g.drawImage(imagemFundo, 0, 0, this.getWidth(), this.getHeight(), this);
+            desenhaQuadrado(g);
+            desenhaAguardando(g);
         } else {
-            //desenhaQuadrado(g);
-            //desenhaIniciando(g);
+            if (estadoServidor.equals("wait")) {
+            
+                g.drawImage(imagemFundo, 0, 0, this.getWidth(), this.getHeight(), this);
+                
+            }else {
+                if (estadoServidor.equals("start")) {
+                
+                    g.drawImage(imagemFundo, 0, 0, this.getWidth(), this.getHeight(), this);
+                    desenhaQuadrado(g);
+                    desenhaIniciando(g);
+                }
+            }
+            
         }
     }
     public void desenhaQuadrado(Graphics g)
