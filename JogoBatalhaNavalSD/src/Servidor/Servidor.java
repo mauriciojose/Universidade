@@ -130,7 +130,7 @@ public class Servidor extends Thread {
                     //System.out.println("Servidor.Servidor.autentica(): "+nomeJogador);
                     nomes.add(nomeJogador);
                     jogadores.add(output);
-
+                    System.out.println(nomeJogador);
                     map.put(nomeJogador, output);
 
                     nomesAuxiliar.add(nomeJogador);
@@ -142,7 +142,7 @@ public class Servidor extends Thread {
  
                     nomes.add(separaTexto[1]);
                     jogadores.add(output);
-
+                    System.out.println(nomeJogador);
                     map.put(nomeJogador, output);
 
                     nomesAuxiliar.add(separaTexto[1]);

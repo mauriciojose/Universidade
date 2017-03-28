@@ -5,7 +5,6 @@
  */
 package TelaDoJogo;
 
-import java.awt.Color;
 import java.net.Socket;
 
 /**
@@ -17,12 +16,12 @@ public class FrameJogo extends javax.swing.JFrame {
     /**
      * Creates new form FrameJogo
      */
-
-    public FrameJogo(Socket connection, boolean vez) {
+    private String nomeAdversario;
+    public FrameJogo(Socket connection, boolean vez,String nomeAdversario) {
         initComponents();
         this.setSize(860, 750);
         this.setResizable(false);
-        PainelJogo painelJogo = new PainelJogo(connection,vez);
+        PainelJogo painelJogo = new PainelJogo(connection,vez,nomeAdversario);
         painelJogo.setBounds(0, 0, getWidth(), getHeight());
         this.getContentPane().add(painelJogo);
         

@@ -50,6 +50,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
     private JList lista;
     private DefaultListModel model;
 
+    private String nomeAdversario;
     /**
      * Creates new form TelaIniciar
      */
@@ -81,7 +82,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
 
         lista = new JList(model);
         lista.setFont(fonte);
-        lista.setBackground(new Color(1.0f, 1.0f, 1.0f,0.8f));
+        lista.setBackground(new Color(0.7f, 0.9f, 0.9f,0.8f));
         
         listScroller = new JScrollPane(lista);
         listScroller.setBounds(135, 150, 140, 90);
@@ -197,7 +198,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
         while (true) {      
             
             msgServidor = input.nextLine();
-      
+            System.out.println("Servidor: "+msgServidor);
             String separaTexto[] = msgServidor.split(";");
             
             if (separaTexto[0].equals("NomeValido")) {
@@ -210,6 +211,9 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
                     
             }else{
                 if (separaTexto[0].equals("iniciar")) {
+                    
+                    nomeAdversario = separaTexto[2];
+                    
                     output.format("iniciou,"+separaTexto[2]+"\n");
                     output.flush();
                     try {
@@ -225,10 +229,10 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
                         //JOptionPane.showMessageDialog(null, "JOGO INICIADO...");
                         if(separaTexto[1].equals("VezTrue"))
                         {
-                            new FrameJogo(cliente,true).setVisible(true);
+                            new FrameJogo(cliente,true,nomeAdversario).setVisible(true);
                         }else{
                             if (separaTexto[1].equals("VezFalse")) {
-                                new FrameJogo(cliente,false).setVisible(true);
+                                new FrameJogo(cliente,false,nomeAdversario).setVisible(true);
                             }
                         }
                         break;

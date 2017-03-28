@@ -90,9 +90,12 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
 
     private int xImage, yImage;
 
-    public PainelJogo(Socket connection, boolean vez) {
+    private String nomeAdversario;
+    
+    public PainelJogo(Socket connection, boolean vez, String nomeAdversario) {
         this.connection = connection;
         this.minhaVez = vez;
+        this.nomeAdversario = nomeAdversario;
 
         this.setLayout(null);
         this.setVisible(true);
@@ -231,7 +234,7 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                     numero = (gerador.nextInt(10)) * 10;
                     numero += gerador.nextInt(7) + 1;
                     //System.out.println("Numero sorteado: "+numero);
-                    if (!barcos.contains(numero)) {
+                    if (!barcos.contains(numero) && !barcos.contains(numero+4)) {
                         barcos.add(numero + 0);
                         barcos.add(numero + 1);
                         barcos.add(numero + 2);
@@ -250,7 +253,7 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                     numero = (gerador.nextInt(10)) * 10;
                     numero += gerador.nextInt(8) + 1;
                     //System.out.println("Numero sorteado: "+numero);
-                    if (!barcos.contains(numero)) {
+                    if (!barcos.contains(numero) && !barcos.contains(numero+3)) {
                         barcos.add(numero + 0);
                         barcos.add(numero + 1);
                         barcos.add(numero + 2);
@@ -266,7 +269,7 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                     numero = (gerador.nextInt(10)) * 10;
                     numero += gerador.nextInt(9) + 1;
                     //System.out.println("Numero sorteado: "+numero);
-                    if (!barcos.contains(numero)) {
+                    if (!barcos.contains(numero) && !barcos.contains(numero+2)) {
                         barcos.add(numero + 0);
                         barcos.add(numero + 1);
 
@@ -294,25 +297,22 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
     }
 
     private void desenhaPontosAndVez() {
-        vez.setBounds(170, 165, 220, 25);
+        vez.setBounds(20, 165, 220, 25);
         vez.setFont(new Font("Courier", Font.BOLD + Font.ITALIC, 20));
-        vez.setBackground(Color.WHITE);
-        vez.setForeground(Color.WHITE);
+
         vez.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         if (minhaVez) {
+            
+            vez.setForeground(Color.GREEN);
             vez.setText("MINHA VEZ...");
+            
         } else {
-            vez.setText("NÃO É A SUA VEZ...");
+            vez.setForeground(Color.RED);
+            vez.setText("VEZ DE: "+nomeAdversario);
+            
         }
         add(vez);
 
-//        pontos.setBounds(10, 165, 150, 25);
-//        pontos.setFont(new Font("Courier", Font.BOLD + Font.ITALIC, 20));
-//        pontos.setBackground(Color.WHITE);
-//        pontos.setForeground(Color.WHITE);
-//        pontos.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-//        pontos.setText("PONTOS: " + 0);
-//        add(pontos);
     }
 
     private void desenhaCenario(boolean clique, int x, int y) {
@@ -404,10 +404,8 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
 
     public void startClient() {
         try {
-            //connection = new Socket("10.11.150.222", 12345);
             input = new Scanner(connection.getInputStream());
             output = new Formatter(connection.getOutputStream());
-            //output.format("connect");
         } catch (IOException ex) {
             System.out.println("SERVIDOR FORA DO AR");
             JOptionPane.showMessageDialog(null, "SERVIDOR DESCONECTADO");
@@ -423,64 +421,68 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
         while (true) {
             String mensagem = input.nextLine();
 
-            //System.out.println("MENSAGEM: "+mensagem);
-            String frutas[] = mensagem.split(";");
+            String msgServidor[] = mensagem.split(";");
 
-            if (frutas[0].equals("jogada")) {
-                if (barcos.contains(Integer.parseInt(frutas[1]))) {
+            if (msgServidor[0].equals("jogada")) {
+                if (barcos.contains(Integer.parseInt(msgServidor[1]))) {
 
                     //System.out.println("OLHA A EXPLOSAO");
                     String filename = "Bombasexplodindo.mp3";
                     mp3 = new MP3(filename);
                     mp3.play();
-                    setIconLabel(labelMeuPainel.get(Integer.parseInt(frutas[1]) - 1), ImageExplosao);
+                    setIconLabel(labelMeuPainel.get(Integer.parseInt(msgServidor[1]) - 1), ImageExplosao);
                     
-                    int remove = barcos.indexOf(Integer.parseInt(frutas[1]));
+                    int remove = barcos.indexOf(Integer.parseInt(msgServidor[1]));
                     barcos.remove(remove);
                     
                     if (barcos.isEmpty()) {
-                        output.format(frutas[1] + ",ganhou" + "\n");
+                        output.format(msgServidor[1] + ",ganhou" + "\n");
                         output.flush();
                         new TelaPerdeu().setVisible(true);
                         minhaVez = false;
                     }else{
-                        output.format(frutas[1] + ",acertou" + "\n");
+                        output.format(msgServidor[1] + ",acertou" + "\n");
                         output.flush();
                     }
                     
 
                 } else {
-                    //System.out.println("TIRO NA AGUA");
-                    setIconLabel(labelMeuPainel.get(Integer.parseInt(frutas[1]) - 1), imageExplosaoAgua);
-                    output.format(frutas[1] + ",agua" + "\n");
+                   
+                    setIconLabel(labelMeuPainel.get(Integer.parseInt(msgServidor[1]) - 1), imageExplosaoAgua);
+                    output.format(msgServidor[1] + ",agua" + "\n");
                     output.flush();
                 }
-                //}
-            } else if (frutas[0].equals("acertou")) {
+                
+            } else if (msgServidor[0].equals("acertou")) {
                 String filename = "Bombasexplodindo.mp3";
                 mp3 = new MP3(filename);
                 mp3.play();
                 ponto++;
                 //System.out.println("OLHA A EXPLOSAO");
-                setIconLabel(labelPainel.get(Integer.parseInt(frutas[1]) - 1), ImageExplosao);
+                setIconLabel(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1), ImageExplosao);
 
                 //pontos.setText("PONTOS: " + ponto);
-                cliques.add(map.get(labelPainel.get(Integer.parseInt(frutas[1]) - 1)));
+                cliques.add(map.get(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1)));
 
-            } else if (frutas[0].equals("agua")) {
+            } else if (msgServidor[0].equals("agua")) {
                 //System.out.println("TIRO NA AGUA");
-                setIconLabel(labelPainel.get(Integer.parseInt(frutas[1]) - 1), imageExplosaoAgua);
+                setIconLabel(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1), imageExplosaoAgua);
 
-                cliques.add(map.get(labelPainel.get(Integer.parseInt(frutas[1]) - 1)));
+                cliques.add(map.get(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1)));
 
                 minhaVez = false;
-                vez.setText("NÃO É A MINHA VEZ");
-                output.format(frutas[1] + ",passavez" + "\n");
+                vez.setForeground(Color.RED);
+                vez.setText("VEZ DE: "+nomeAdversario);
+                
+                output.format(msgServidor[1] + ",passavez" + "\n");
                 output.flush();
-            } else if (frutas[0].equals("passavez")) {
+            } else if (msgServidor[0].equals("passavez")) {
+
                 minhaVez = true;
+                vez.setForeground(Color.GREEN);
                 vez.setText("MINHA VEZ");
-            } else if (frutas[0].equals("ganhou")) {
+
+            } else if (msgServidor[0].equals("ganhou")) {
                 new TelaGanhou().setVisible(true);
                 minhaVez = false;
             }

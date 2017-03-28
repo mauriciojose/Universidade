@@ -114,7 +114,7 @@ public class PainelInicial extends javax.swing.JPanel{
         desenhaQuadrado.translate(this.getWidth() / 4, this.getHeight() / 2);
         desenhaQuadrado.setComposite(alcomQuadrado);
         desenhaQuadrado.setColor(Color.WHITE);
-        desenhaQuadrado.fillRoundRect(10, 30, 200, 70, 300, 10);
+        desenhaQuadrado.fillRoundRect(5, 30, 200, 70, 300, 10);
     }
     public void desenhaAguardando(Graphics g)
     {
@@ -127,7 +127,7 @@ public class PainelInicial extends javax.swing.JPanel{
         desenhaString.drawString(percorreAguardando, 45, 47);//criar variaveis para esses valores
         desenhaString.setColor(Color.RED);
         desenhaString.setFont(new Font("Verdana", 3, 13));
-        desenhaString.drawString(desconectado, -20 + 35, 7 + 70);
+        desenhaString.drawString(desconectado, -20 + 27, 7 + 70);
         //if percorrendo aguardando
         if (contAguardando == tamanhoAguardando) {
             contAguardando = 0;
@@ -165,7 +165,7 @@ public class PainelInicial extends javax.swing.JPanel{
         desenhaString.setComposite(alcomDesaparecer);
         desenhaString.setColor(Color.BLACK);
         desenhaString.setFont(fonte);
-        desenhaString.drawString("INICIANDO...", 50, 47);
+        desenhaString.drawString("INICIANDO...", 60, 67);
 //        desenhaString.setColor(Color.RED);
 //        desenhaString.drawString("PLAYER 2 CONECTADO", -20+48, 7+70);
     }
