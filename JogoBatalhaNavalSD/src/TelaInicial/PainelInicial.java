@@ -139,7 +139,7 @@ public class PainelInicial extends javax.swing.JPanel{
      public void desenhaIniciando(Graphics g)
     {
         Graphics2D desenhaString = (Graphics2D) g;
-        if (efeitoDesaparecer < 90) {
+        if (efeitoDesaparecer < 9) {
             desenhaStringIniciar(desenhaString, true);
             efeitoDesaparecer++;
         } else {
@@ -155,7 +155,7 @@ public class PainelInicial extends javax.swing.JPanel{
         }
     }
     public void desenhaStringIniciar(Graphics2D desenhaString, boolean desaparece)
-    {
+    {   
         if (desaparece) {
             alphaDesaparecer = alphaDesaparecer - 0.1f;
         }
