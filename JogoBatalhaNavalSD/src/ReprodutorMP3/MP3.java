@@ -8,6 +8,8 @@ package ReprodutorMP3;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
+import javax.swing.JOptionPane;
 import javazoom.jl.player.Player;
 
 
@@ -25,15 +27,18 @@ public class MP3 {
     // play the MP3 file to the sound card
     public void play() {
         try {
-            File file = new File(getClass().getResource(filename).toURI());
-            FileInputStream fis     = new FileInputStream(file);
-            BufferedInputStream bis = new BufferedInputStream(fis);
+            //File file = new File(this.getClass().getResource(filename).toURI());
+            InputStream is= getClass().getResourceAsStream(filename);
+            //FileInputStream fis     =  new FileInputStream(is);
+            BufferedInputStream bis = new BufferedInputStream(is);
             player = new Player(bis);
             
         }
         catch (Exception e) {
-            System.out.println("Problem playing file " + filename);
-            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Problem playing file " + filename);
+            JOptionPane.showMessageDialog(null, e);
+//            System.out.println("Problem playing file " + filename);
+//            System.out.println(e);
         }
 
         // run in new thread to play in background

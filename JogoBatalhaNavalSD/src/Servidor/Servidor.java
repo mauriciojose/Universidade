@@ -90,14 +90,46 @@ public class Servidor extends Thread {
                     System.out.println("TEXTO: " + texto);
                     String separaTexto[] = texto.split(",");
                     if (separaTexto[0].equals("sair")) {
+                        
                         int index = nomes.indexOf(separaTexto[1]);
                         nomes.remove(index);
                         map.remove(separaTexto[1], output);
+                        
+                        outputAdversario.format("saiu;\n");
+                        outputAdversario.flush();
+                        
+                        output.format("saidaAceita;\n");
+                        output.flush();
+                        
                         connection.close();
                         
                     } else {
-                        outputAdversario.format(separaTexto[1] + ";" + separaTexto[0] + "\n");
-                        outputAdversario.flush();
+                        
+                        if (separaTexto[0].equals("sairIni")) {
+                            int index = nomes.indexOf(separaTexto[1]);
+                            nomes.remove(index);
+                            map.remove(separaTexto[1], output);
+
+                            jogadores.remove(output);
+                            nomesAuxiliar.remove(nomeJogador);
+                            
+                            connection.close();
+
+                        } else {
+                            if (separaTexto[0].equals("desconectar")) {
+                            int index = nomes.indexOf(separaTexto[1]);
+                            nomes.remove(index);
+                            map.remove(separaTexto[1], output);
+                            
+                            connection.close();
+
+                            } else {
+                                outputAdversario.format(separaTexto[1] + ";" + separaTexto[0] + "\n");
+                                outputAdversario.flush();
+
+                            }
+
+                        }
                         
                     }
                     //System.out.println("ENVIANDO...:" + separaTexto[0]);

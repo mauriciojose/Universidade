@@ -7,6 +7,7 @@ package TelaDoJogo;
 
 import java.net.Socket;
 
+
 /**
  *
  * @author Mauricio José
@@ -24,6 +25,7 @@ public class FrameJogo extends javax.swing.JFrame {
         PainelJogo painelJogo = new PainelJogo(this,connection,vez,nomeAdversario,nome);
         painelJogo.setBounds(0, 0, getWidth(), getHeight());
         this.getContentPane().add(painelJogo);
+        
         
     }
 

@@ -14,6 +14,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
@@ -24,6 +26,8 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -92,6 +96,8 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
 
     private String nomeAdversario;
     private String nome;
+    private String desconectar = "sair";
+    String mensagem;
     
     private FrameJogo fj;
     
@@ -101,7 +107,7 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
         this.minhaVez = vez;
         this.nomeAdversario = nomeAdversario;
         this.nome = nome;
-        
+         
         this.setLayout(null);
         this.setVisible(true);
 
@@ -114,20 +120,18 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
         movY = 200;
         desenhaCenario(false, xPainel, yPainel);
         startClient();
-    }
-
-    public PainelJogo() {
-        this.setLayout(null);
-        this.setVisible(true);
-
-        inicia();
-        desenhaPontosAndVez();
-        desenhaCenario(true, xPainel, yPainel);
-        xPainel = 450;
-        yPainel = 200;
-        movX = 450;
-        movY = 200;
-        desenhaCenario(false, xPainel, yPainel);
+        fj.setDefaultCloseOperation(fj.DO_NOTHING_ON_CLOSE);
+                        fj.addWindowListener(new WindowAdapter() {
+                        public void windowClosing(WindowEvent evt) {
+                            try {
+                                Formatter output = new Formatter(connection.getOutputStream());
+                                
+                                enviaServidor(output);
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(null, "erro na conexao");
+                            }
+                        }
+                        });
     }
 
     private void inicia() {
@@ -424,8 +428,9 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
     public void run() {
 
         while (true) {
-            String mensagem = input.nextLine();
-
+            
+            mensagem = input.nextLine();
+            System.out.println("Mensagem: "+mensagem);
             String msgServidor[] = mensagem.split(";");
 
             if (msgServidor[0].equals("jogada")) {
@@ -492,9 +497,22 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                 new TelaGanhou(connection,nome).setVisible(true);
                 fj.dispose();
                 minhaVez = false;
+            }else if (msgServidor[0].equals("saiu")) {
+                    vez.setForeground(Color.WHITE);
+                    vez.setText(nomeAdversario+" SAIU DO JOGO");
+                    desconectar = "desconectar";
+                    minhaVez = false;
+                    break;
+            }else if (msgServidor[0].equals("saidaAceita")) {
+                try {
+                    connection.close();
+                } catch (IOException ex) {
+                    
+                }
+                break;
             }
-
         }
+        System.exit(0);
     }
 
     class TrataEvento extends MouseAdapter {
@@ -560,5 +578,10 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
         label.setIcon(null);
         label.setOpaque(true);
         label.setIcon(image);
+    }
+    public void enviaServidor(Formatter out)
+    {
+        out.format(desconectar+","+nome+"\n");
+        out.flush();
     }
 }
