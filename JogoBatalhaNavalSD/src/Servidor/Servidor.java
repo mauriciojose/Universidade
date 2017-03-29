@@ -87,12 +87,21 @@ public class Servidor extends Thread {
 
                 try {
                     String texto = entrada.readLine();
-                    //System.out.println("TEXTO: " + texto);
+                    System.out.println("TEXTO: " + texto);
                     String separaTexto[] = texto.split(",");
-
+                    if (separaTexto[0].equals("sair")) {
+                        int index = nomes.indexOf(separaTexto[1]);
+                        nomes.remove(index);
+                        map.remove(separaTexto[1], output);
+                        connection.close();
+                        
+                    } else {
+                        outputAdversario.format(separaTexto[1] + ";" + separaTexto[0] + "\n");
+                        outputAdversario.flush();
+                        
+                    }
                     //System.out.println("ENVIANDO...:" + separaTexto[0]);
-                    outputAdversario.format(separaTexto[1] + ";" + separaTexto[0] + "\n");
-                    outputAdversario.flush();
+                    
 
                 } catch (IOException e) {
                     try {

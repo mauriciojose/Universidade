@@ -5,12 +5,15 @@
  */
 package TelaGanhou;
 
-import java.awt.image.BufferedImage;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.Socket;
+import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,11 +24,29 @@ public class TelaGanhou extends javax.swing.JFrame {
     /**
      * Creates new form TelaGanhou
      */
-    
-    public TelaGanhou() {
+    private Socket connection;
+    private String name;
+    public TelaGanhou(Socket connection, String name) {
+        this.connection = connection;
+        this.name = name;
+        
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(TelaGanhou.DO_NOTHING_ON_CLOSE);
+        
+        addWindowListener(new WindowAdapter() {
+	public void windowClosing(WindowEvent evt) {
+            try {
+                Formatter output = new Formatter(connection.getOutputStream());
+                output.format("sair,"+name+"\n");
+                output.flush();
+                System.exit(0);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "erro na conexao");
+            }
+        }
+        });
     }
 
     /**

@@ -5,8 +5,14 @@
  */
 package TelaPerdeu;
 
-import java.awt.Image;
+import TelaGanhou.TelaGanhou;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Formatter;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,11 +23,28 @@ public class TelaPerdeu extends javax.swing.JFrame {
     /**
      * Creates new form TelaGanhou
      */
-    
-    public TelaPerdeu() {
+     private Socket connection;
+     private String name;
+    public TelaPerdeu(Socket connection, String name) {
+        this.connection = connection;
+        this.name = name;
         initComponents();
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(TelaGanhou.DO_NOTHING_ON_CLOSE);
+        
+        addWindowListener(new WindowAdapter() {
+	public void windowClosing(WindowEvent evt) {
+            try {
+                Formatter output = new Formatter(connection.getOutputStream());
+                output.format("sair,"+name+"\n");
+                output.flush();
+                System.exit(0);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "erro na conexao");
+            }
+        }
+        });
     }
 
     /**
@@ -86,11 +109,11 @@ public class TelaPerdeu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaPerdeu().setVisible(true);
-            }
-        });
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new TelaPerdeu().setVisible(true);
+//            }
+//        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

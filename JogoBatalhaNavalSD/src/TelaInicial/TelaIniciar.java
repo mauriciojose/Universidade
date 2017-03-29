@@ -10,10 +10,13 @@ import java.util.Scanner;
 import java.util.Formatter;
 import ReprodutorMP3.MP3;
 import TelaDoJogo.FrameJogo;
+import TelaGanhou.TelaGanhou;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
@@ -57,6 +60,21 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
     public TelaIniciar() {
 
         initComponents();
+        this.setDefaultCloseOperation(TelaIniciar.DO_NOTHING_ON_CLOSE);
+        
+        addWindowListener(new WindowAdapter() {
+	public void windowClosing(WindowEvent evt) {
+            try {
+                Formatter output = new Formatter(cliente.getOutputStream());
+                output.format("sairIni,"+namePlayer+"\n");
+                output.flush();
+                System.exit(0);
+                
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "erro na conexao");
+            }
+        }
+        });
         inicializaVariaveis();
         update();
         startClient();
@@ -229,10 +247,10 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
                         //JOptionPane.showMessageDialog(null, "JOGO INICIADO...");
                         if(separaTexto[1].equals("VezTrue"))
                         {
-                            new FrameJogo(cliente,true,nomeAdversario).setVisible(true);
+                            new FrameJogo(cliente,true,nomeAdversario,namePlayer).setVisible(true);
                         }else{
                             if (separaTexto[1].equals("VezFalse")) {
-                                new FrameJogo(cliente,false,nomeAdversario).setVisible(true);
+                                new FrameJogo(cliente,false,nomeAdversario,namePlayer).setVisible(true);
                             }
                         }
                         break;

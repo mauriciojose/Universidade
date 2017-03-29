@@ -91,12 +91,17 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
     private int xImage, yImage;
 
     private String nomeAdversario;
+    private String nome;
     
-    public PainelJogo(Socket connection, boolean vez, String nomeAdversario) {
+    private FrameJogo fj;
+    
+    public PainelJogo(FrameJogo fj, Socket connection, boolean vez, String nomeAdversario, String nome) {
+        this.fj =fj;
         this.connection = connection;
         this.minhaVez = vez;
         this.nomeAdversario = nomeAdversario;
-
+        this.nome = nome;
+        
         this.setLayout(null);
         this.setVisible(true);
 
@@ -438,7 +443,8 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                     if (barcos.isEmpty()) {
                         output.format(msgServidor[1] + ",ganhou" + "\n");
                         output.flush();
-                        new TelaPerdeu().setVisible(true);
+                        new TelaPerdeu(connection,nome).setVisible(true);
+                        fj.dispose();
                         minhaVez = false;
                     }else{
                         output.format(msgServidor[1] + ",acertou" + "\n");
@@ -483,7 +489,8 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                 vez.setText("MINHA VEZ");
 
             } else if (msgServidor[0].equals("ganhou")) {
-                new TelaGanhou().setVisible(true);
+                new TelaGanhou(connection,nome).setVisible(true);
+                fj.dispose();
                 minhaVez = false;
             }
 

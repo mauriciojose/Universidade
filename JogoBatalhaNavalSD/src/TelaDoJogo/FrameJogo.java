@@ -17,11 +17,11 @@ public class FrameJogo extends javax.swing.JFrame {
      * Creates new form FrameJogo
      */
     private String nomeAdversario;
-    public FrameJogo(Socket connection, boolean vez,String nomeAdversario) {
+    public FrameJogo(Socket connection, boolean vez,String nomeAdversario,String nome) {
         initComponents();
         this.setSize(860, 750);
         this.setResizable(false);
-        PainelJogo painelJogo = new PainelJogo(connection,vez,nomeAdversario);
+        PainelJogo painelJogo = new PainelJogo(this,connection,vez,nomeAdversario,nome);
         painelJogo.setBounds(0, 0, getWidth(), getHeight());
         this.getContentPane().add(painelJogo);
         
