@@ -6,8 +6,6 @@
 package ReprodutorMP3;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import javax.swing.JOptionPane;
 import javazoom.jl.player.Player;

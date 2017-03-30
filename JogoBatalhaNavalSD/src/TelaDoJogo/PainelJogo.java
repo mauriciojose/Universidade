@@ -26,8 +26,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -354,7 +352,6 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
                         labelMeuPainel.add(mar);
                     } else {
                         verificaBarcos(linha + coluna + 1);
-
                     }
 
                     xPainel += 40;
@@ -459,6 +456,10 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
 
                 } else {
                    
+                    String filename = "ExplosaoAgua.mp3";
+                    mp3 = new MP3(filename);
+                    mp3.play();
+                    
                     setIconLabel(labelMeuPainel.get(Integer.parseInt(msgServidor[1]) - 1), imageExplosaoAgua);
                     output.format(msgServidor[1] + ",agua" + "\n");
                     output.flush();
@@ -477,6 +478,9 @@ public class PainelJogo extends javax.swing.JPanel implements Runnable {
 
             } else if (msgServidor[0].equals("agua")) {
                 //System.out.println("TIRO NA AGUA");
+                String filename = "ExplosaoAgua.mp3";
+                    mp3 = new MP3(filename);
+                    mp3.play();
                 setIconLabel(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1), imageExplosaoAgua);
 
                 cliques.add(map.get(labelPainel.get(Integer.parseInt(msgServidor[1]) - 1)));
