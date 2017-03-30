@@ -134,7 +134,7 @@ public final class TelaIniciar extends javax.swing.JFrame implements Runnable {
         while (conectou) {
 
             try {
-                cliente = new Socket("localhost", 12345);
+                cliente = new Socket("10.11.150.222", 12345);
                 input = new Scanner(cliente.getInputStream());
                 output = new Formatter(cliente.getOutputStream());
 
